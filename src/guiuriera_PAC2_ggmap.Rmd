@@ -1,0 +1,141 @@
+---
+title: "guiuriera_PAC2"
+author: "Guiu Riera"
+date: "11/4/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(dplyr)
+library(ggmap)
+```
+
+
+# **1 Lectura del fitxer i preparació de les dades**
+
+***Llegiu el fitxer fifa.csv i guardeu les dades en un objecte amb identificador denominat fifa. A continuació, verifiqueu el tipus de cada variable. Quines variables són de tipus numèric? Quines variables són de tipus categòric?***
+
+```{r}
+df_geom <- read.csv("Dades_Cobertura_Mobil_2015-2019.csv", header = TRUE, sep = ",")
+```
+
+
+```{r check loaded data}
+head(df_geom)
+```
+
+
+```{r}
+# status: 0 -> No Senyal; 1 -> Baixa; 2 -> Mitjana; 3 -> Alta
+summary(df_geom)
+```
+
+```{r}
+df_geom_clean <- select(df_geom, Xarxa, Date, status, Long_, Lat)
+df_geom_clean$Xarxa <- as.factor(df_geom_clean$Xarxa)
+df_geom_clean$Year <- sapply(strsplit(df_geom_clean$Date, '/'), tail, 1)
+df_geom_clean$Year <- as.factor(df_geom_clean$Year)
+df_geom_clean$status <- as.factor(df_geom_clean$status)
+
+# summary(df_geom_clean)
+```
+
+
+```{r}
+# df_geom_2019 <- filter(df_geom_clean, Year == 2019 & Xarxa %in% c('movistar', 'orange', 'vodafone', 'yoigo') & status == 0)
+df_geom_2019_no_sig <- filter(df_geom_clean, Year == 2019 & Xarxa %in% c('movistar', 'orange', 'vodafone', 'yoigo') & status == 0)
+
+# summary(df_geom_2019)
+```
+
+
+```{r}
+# write.csv(df_geom_2019, "Dades_Cobertura_Mobil_2019.csv", row.names=FALSE)
+write.csv(df_geom_2019_no_sig, "Dades_Cobertura_Mobil_2019_no_sig.csv", row.names=FALSE)
+```
+
+
+
+
+
+```{r}
+df_geom <- read.csv("Dades_Cobertura_Mobil_2019.csv", header = TRUE, sep = ",")
+df_geom$Xarxa <- as.factor(df_geom$Xarxa)
+df_geom$Year <- as.factor(df_geom$Year)
+df_geom$status <- as.factor(df_geom$status)
+
+summary(df_geom)
+```
+
+
+
+
+```{r}
+register_google(key = "[your key]")
+#mapa <- get_map('Madrid', source = 'osm', maptype = 'toner', zoom = 12)
+mapa <- get_map(location = c(lon = -95.3632715, lat = 29.7632836), source = 'osm', maptype = 'toner', zoom = 12)
+
+ggmap(mapa)
+```
+
+
+```{r}
+#map <- get_map(c(left = -97.1268, bottom = 31.536245, right = -97.099334, top = 31.559652), maptype = 'toner')
+map <- get_map(c(left = -97.1268, bottom = 31.536245, right = -97.099334, top = 31.559652), source = 'stamen', maptype = 'toner')
+
+ggmap(map)
+```
+
+
+```{r}
+cat <- c(left = min(df_geom$Long_), bottom = min(df_geom$Lat), right = max(df_geom$Long_), top = max(df_geom$Lat))
+#terrain”, “terrain-background”, “terrain-labels”, “terrain-lines”, “toner”, “toner-2010”, “toner-2011”, “toner-background”, “toner-hybrid”, “toner-labels”, “toner-lines”, “toner-lite”, “watercolor”
+map <- get_stamenmap(cat, zoom = 9, maptype = "toner-lines")
+
+ggmap(map) +
+  geom_point(aes(x = Long_, y = Lat, colour = Xarxa), data = df_geom, size = 1)
+```
+
+
+```{r}
+cat <- c(left = min(df_geom$Long_), bottom = min(df_geom$Lat), right = max(df_geom$Long_), top = max(df_geom$Lat))
+#terrain”, “terrain-background”, “terrain-labels”, “terrain-lines”, “toner”, “toner-2010”, “toner-2011”, “toner-background”, “toner-hybrid”, “toner-labels”, “toner-lines”, “toner-lite”, “watercolor”
+map <- get_stamenmap(cat, zoom = 9, maptype = "terrain-background")
+
+ggmap(map) +
+  geom_point(aes(x = Long_, y = Lat, colour = Xarxa), data = df_geom, size = 1) +
+  facet_wrap(~ Xarxa)
+```
+
+
+```{r}
+df_geom <- read.csv("Dades_Cobertura_Mobil_2019_no_sig.csv", header = TRUE, sep = ",")
+df_geom$Xarxa <- as.factor(df_geom$Xarxa)
+df_geom$Year <- as.factor(df_geom$Year)
+df_geom$status <- as.factor(df_geom$status)
+
+cat <- c(left = min(df_geom$Long_), bottom = min(df_geom$Lat), right = max(df_geom$Long_), top = max(df_geom$Lat))
+#terrain”, “terrain-background”, “terrain-labels”, “terrain-lines”, “toner”, “toner-2010”, “toner-2011”, “toner-background”, “toner-hybrid”, “toner-labels”, “toner-lines”, “toner-lite”, “watercolor”
+map <- get_stamenmap(cat, zoom = 9, maptype = "terrain-background")
+
+ggmap(map) +
+  geom_point(aes(x = Long_, y = Lat), data = df_geom, size = 1) #+
+  # facet_wrap(~ Xarxa)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
