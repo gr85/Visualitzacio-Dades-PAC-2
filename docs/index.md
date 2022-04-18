@@ -1,2 +1,2 @@
 
-![Dot Map](/Visualitzacio-Dades-PAC-2/assets/density_map_1.png)
+![Dot Map](/Visualitzacio-Dades-PAC-2/docs/assets/density_map_1.png)
