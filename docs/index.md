@@ -3,7 +3,7 @@
 
 ### Amb categories
 
-![Dot Map 1](/Visualitzacio-Dades-PAC-2/docs/assets/density_map_1.png)
+![Dot Map 1](/Visualitzacio-Dades-PAC-2/assets/density_map_1.png)
 
 ### Sense categories
 
