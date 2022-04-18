@@ -7,12 +7,12 @@
 
 ### Sense categories
 
-#[Dot Map 2](/Visualitzacio-Dades-PAC-2/docs/assets/density_map_2.png)
+![Dot Map 2](/Visualitzacio-Dades-PAC-2/assets/density_map_2.png)
 
 # Circular Dendrogram
 
-#[Circular Dendrogram](/Visualitzacio-Dades-PAC-2/docs/assets/circular_dendrogram.png)
+![Circular Dendrogram](/Visualitzacio-Dades-PAC-2/assets/circular_dendrogram.png)
 
 # UpSet Diagram
 
-#[UpSet Diagram](/Visualitzacio-Dades-PAC-2/docs/assets/UpSet_diagram.png)
+![UpSet Diagram](/Visualitzacio-Dades-PAC-2/assets/UpSet_diagram.png)
