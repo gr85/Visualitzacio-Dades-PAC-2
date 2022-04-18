@@ -1,0 +1,107 @@
+---
+title: "guiuriera_PRA2_CircularDendrogram"
+author: "Guiu Riera Riera"
+date: "15/4/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r warning=FALSE}
+library(dplyr)
+
+# install.packages("dendextend")
+# install.packages("circlize")
+library(dendextend)
+library(circlize)
+```
+
+# **1 Lectura del fitxer i preparació de les dades**
+
+***Llegiu el fitxer fifa.csv i guardeu les dades en un objecte amb identificador denominat fifa. A continuació, verifiqueu el tipus de cada variable. Quines variables són de tipus numèric? Quines variables són de tipus categòric?***
+
+```{r}
+df_clus <- read.csv("Bar chart - Netflix Original Series.tsv", header = TRUE, sep = "\t")
+```
+
+
+```{r check loaded data}
+head(df_clus)
+```
+
+
+```{r}
+df_clus$Genere <- as.factor(df_clus$Genere)
+df_clus$Subgenre <- as.factor(df_clus$Subgenre)
+df_clus$Premiere_Year <- as.factor(df_clus$Premiere_Year)
+df_clus$Status <- as.factor(df_clus$Status)
+
+df_clus <- na.omit(df_clus)
+
+rownames(df_clus) <- df_clus$Title
+
+df_clus <- df_clus[,-c(2)]
+
+summary(df_clus)
+```
+
+
+
+
+
+
+```{r fig.height=20                         }
+# Distance matrix
+d <- dist(df_clus)
+
+# Hierarchical clustering dendrogram
+hc <- as.dendrogram(hclust(d))
+
+# Colors
+hc <- hc %>%
+  color_branches(k = 8, col=c('black', 'brown4', 'blue4', 'firebrick3', 'bisque4', 'mediumorchid3', 'cornflowerblue', 'green4')) %>%
+  color_labels(k = 8, col=c('black', 'brown4', 'blue4', 'firebrick3', 'bisque4', 'mediumorchid3', 'cornflowerblue', 'green4'))
+
+# Fan tree plot with colored labels
+circlize_dendrogram(hc,
+                    labels_track_height = NA,
+                    dend_track_height = 0.4) 
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
